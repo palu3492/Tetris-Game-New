@@ -18,7 +18,7 @@ class Tetris:
         self.frames_per_second = 30
         self.score = 0
         self.lines = 0
-        self.highscore = int(open("files/highscore.txt", "r").read())
+        self.high_score = int(open("files/highscore.txt", "r").read())
         self.background = pygame.image.load('files/images/background4.jpg')
         self.game_running = True
         self.setup()
@@ -202,9 +202,9 @@ class Tetris:
         self.score = 0
         for i in range(self.lines):
             self.score += (i * 10)
-        if self.score > self.highscore:
-            self.highscore = self.score
-            open("files/highscore.txt", "w").write(str(self.highscore))
+        if self.score > self.high_score:
+            self.high_score = self.score
+            open("files/highscore.txt", "w").write(str(self.high_score))
 
 
     def blit_scores(self):
@@ -218,7 +218,7 @@ class Tetris:
         rect.center = (510, 350)
         self.pygame_screen.blit(block, rect)
 
-        block = self.font.render(str(self.highscore), True, (0, 0, 0))
+        block = self.font.render(str(self.high_score), True, (0, 0, 0))
         rect = block.get_rect()
         rect.center = (510, 465)
         self.pygame_screen.blit(block, rect)
