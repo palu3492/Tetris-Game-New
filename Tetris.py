@@ -21,6 +21,7 @@ class Tetris:
         self.high_score = int(open("files/highscore.txt", "r").read())
         self.background = pygame.image.load('files/images/background4.jpg')
         self.game_running = True
+        self.high_score_write = None
         self.setup()
 
     def setup(self):
@@ -29,6 +30,7 @@ class Tetris:
         self.pygame_screen = pygame.display.set_mode((582,785))
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('files/fonts/arial.ttf', 45)
+        self.high_score_write = open("files/highscore.txt", "w")
 
     def splash_screens(self):
         self.splash_screen()
@@ -97,9 +99,9 @@ class Tetris:
             self.outer_squares.append(Square(None, 8, col, 18))
 
     def create_walls(self):
-        for row in range(18):
+        for row in range(-1, 18):
             self.outer_squares.append(Square(None, 8, -1, row))
-        for row in range(18):
+        for row in range(-1, 18):
             self.outer_squares.append(Square(None, 8, 10, row))
 
     def new_piece(self):
@@ -177,8 +179,9 @@ class Tetris:
                 win_count += 1
                 self.delete_row(row)
                 self.drop_rows_down(row)
-        self.lines += win_count
-        self.calculate_score()
+        if win_count > 0:
+            self.lines += win_count
+            self.add_to_score(win_count)
 
     def delete_row(self, row):
         index = 0
@@ -198,13 +201,14 @@ class Tetris:
         while self.move_piece_down():
             pass
 
-    def calculate_score(self):
-        self.score = 0
-        for i in range(self.lines):
-            self.score += (i * 10)
+    def add_to_score(self, win_count):
+        new_score = 0
+        for i in range(win_count):
+            new_score += ((i+1) * 10)
+        self.score += new_score
         if self.score > self.high_score:
             self.high_score = self.score
-            open("files/highscore.txt", "w").write(str(self.high_score))
+            self.high_score_write.write(str(self.high_score))
 
 
     def blit_scores(self):
