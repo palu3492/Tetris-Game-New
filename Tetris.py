@@ -186,7 +186,7 @@ class Tetris:
                 row_dictionary[square_row] = 1
         win_count = 0
         for row in sorted(row_dictionary):
-            #row_dictionary[row] = 10 #always win
+            # row_dictionary[row] = 10 #always win
             if row_dictionary[row] == 10:
                 win_count += 1
                 self.add_particles(row)
@@ -199,8 +199,8 @@ class Tetris:
     def add_particles(self, line):
         for square in self.squares:
             if square.get_row() == line:
-                for row in range(3):
-                    for col in range(20):
+                for row in range(2):
+                    for col in range(15):
                         self.particles.append(Particle(self.pygame_screen, col, row, line, 5))
 
     def delete_row(self, row):
