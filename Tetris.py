@@ -4,6 +4,7 @@ import pygame
 import random
 from Piece import Piece
 from Square import Square
+from Particle import Particle
 
 class Tetris:
 
@@ -13,6 +14,7 @@ class Tetris:
         self.font = None
         self.piece = None
         self.squares = []
+        self.particles = []
         self.outer_squares = []
         self.drops_per_second = 6
         self.frames_per_second = 30
@@ -21,7 +23,6 @@ class Tetris:
         self.high_score = int(open("files/highscore.txt", "r").read())
         self.background = pygame.image.load('files/images/background4.jpg')
         self.game_running = True
-        self.high_score_write = None
         self.setup()
 
     def setup(self):
@@ -30,7 +31,6 @@ class Tetris:
         self.pygame_screen = pygame.display.set_mode((582,785))
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('files/fonts/arial.ttf', 45)
-        self.high_score_write = open("files/highscore.txt", "w")
 
     def splash_screens(self):
         self.splash_screen()
@@ -164,6 +164,17 @@ class Tetris:
         for square in self.squares:
             square.blit()
         self.blit_scores()
+        self.blit_particles()
+
+    def blit_particles(self):
+        index = 0
+        for i in range(len(self.particles)):
+            particle = self.particles[index]
+            particle.blit()
+            if not particle.blit():
+                del self.particles[index]
+            else:
+                index += 1
 
     def check_line_win(self):
         row_dictionary = {}
@@ -175,13 +186,22 @@ class Tetris:
                 row_dictionary[square_row] = 1
         win_count = 0
         for row in sorted(row_dictionary):
+            #row_dictionary[row] = 10 #always win
             if row_dictionary[row] == 10:
                 win_count += 1
+                self.add_particles(row)
                 self.delete_row(row)
                 self.drop_rows_down(row)
         if win_count > 0:
             self.lines += win_count
             self.add_to_score(win_count)
+
+    def add_particles(self, line):
+        for square in self.squares:
+            if square.get_row() == line:
+                for row in range(3):
+                    for col in range(20):
+                        self.particles.append(Particle(self.pygame_screen, col, row, line, 5))
 
     def delete_row(self, row):
         index = 0
@@ -208,7 +228,7 @@ class Tetris:
         self.score += new_score
         if self.score > self.high_score:
             self.high_score = self.score
-            self.high_score_write.write(str(self.high_score))
+            open("files/highscore.txt", "w").write(str(self.high_score))
 
 
     def blit_scores(self):
