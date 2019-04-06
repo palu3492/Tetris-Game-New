@@ -1,4 +1,4 @@
 # Tetris-Game-New
 
 ## Gameplay
-![alt text](https://raw.githubusercontent.com/palu3492/Stage-Diagram-Creator/master/files/images/gameplay.gif)
+![gameplay gif](https://github.com/palu3492/tetris-game-new/blob/master/files/images/gameplay.gif)
