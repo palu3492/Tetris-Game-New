@@ -276,5 +276,5 @@ class Tetris:
 
 
 tetris = Tetris()
-# tetris.splash_screens()
+tetris.splash_screens()
 tetris.start_game()
